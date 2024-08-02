@@ -1,21 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateCatDto, UpdateCatDto } from './dto';
+import { Cat } from './schemas';
+import type { CatType } from './interfaces';
+import { getResponseData } from '../utils';
 
 @Injectable()
 export class CatsService {
-  private readonly cats: UpdateCatDto[] = [
-    {
-      name: '11',
-      age: 18,
-      breed: '11',
-    },
-  ];
+  constructor(@InjectModel(Cat.name) private catModel: Model<Cat>) {}
 
-  create(cat: CreateCatDto) {
-    this.cats.push(cat);
+  async create(@Body() cat: CreateCatDto): Promise<CreateCatDto> {
+    try {
+      const createdCat = new this.catModel(cat);
+      const r = await createdCat.save();
+
+      const keysOfCatType = Object.keys({} as CatType);
+      return getResponseData(r, keysOfCatType);
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findAll(): UpdateCatDto[] {
-    return this.cats;
+  async findAll(): Promise<UpdateCatDto[]> {
+    return this.catModel.find().exec();
   }
 }

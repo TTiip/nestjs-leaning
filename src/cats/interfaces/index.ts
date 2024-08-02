@@ -1,5 +1,7 @@
-export interface Cat {
+export interface CatType {
+  userName: string;
+  passWord: string;
   name: string;
   age: number;
-  breed: string;
+  time?: Date;
 }

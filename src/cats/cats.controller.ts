@@ -10,7 +10,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import { CreateCatDto, UpdateCatDto } from './dto';
-import type { Cat } from './interfaces';
+import type { CatType } from './interfaces';
 import { CatsService } from './cats.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -22,17 +22,19 @@ export class CatsController {
   ) {}
 
   @Post()
+  // 建议不要随便改 - 避免乱了
   @HttpCode(200)
   create(@Body() createCatDto: CreateCatDto, @Headers() headers) {
-    console.log(headers, 'headers');
-    console.log(createCatDto, 'createCatDto');
-    console.log(this.configService.get('MONGODB_URL'), 'MONGODB_URL');
-    console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-    this.catsService.create(createCatDto);
+    // console.log(this.catsService, 'this.catsService')
+    // console.log(headers, 'headers');
+    // console.log(createCatDto, 'createCatDto');
+    // console.log(this.configService.get('MONGODB_URL'), 'MONGODB_URL');
+    // console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
+    return this.catsService.create(createCatDto);
   }
 
   @Get()
-  findAll(): Cat[] {
+  findAll(): Promise<CatType[]> {
     return this.catsService.findAll();
   }
 
