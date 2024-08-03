@@ -46,6 +46,8 @@ export class TransformInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
+        console.log(Object.keys(data), 'Object.keys(data)')
+        console.log(data, 'data')
         return {
           data,
           code: 0,
@@ -73,7 +75,6 @@ export class CustomValidationPipe extends ValidationPipe {
     parentPath?: string,
   ): ValidationError[] {
     const errors = super.mapChildrenToValidationErrors(error, parentPath);
-    console.log(errors, 'errors');
 
     errors.forEach((error) => {
       Object.keys(error.constraints).forEach((key) => {
@@ -81,7 +82,6 @@ export class CustomValidationPipe extends ValidationPipe {
           `字段【${error.property}】的值为【${error.value}】但是${error.constraints[key]}`;
       });
     });
-    console.log(errors, 'errors');
     return errors;
   }
 }

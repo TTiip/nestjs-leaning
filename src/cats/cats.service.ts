@@ -3,8 +3,7 @@ import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateCatDto, UpdateCatDto } from './dto';
 import { Cat } from './schemas';
-import type { CatType } from './interfaces';
-import { getResponseData } from '../utils';
+import { transFormData } from '../utils';
 
 @Injectable()
 export class CatsService {
@@ -14,9 +13,10 @@ export class CatsService {
     try {
       const createdCat = new this.catModel(cat);
       const r = await createdCat.save();
+      // 转化成一个 普通的 JavaScript 对象(很重要!! 方便后续对数据进行处理)
+      const jsObjResult = await r.toObject()
 
-      const keysOfCatType = Object.keys({} as CatType);
-      return getResponseData(r, keysOfCatType);
+      return transFormData(jsObjResult);
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
