@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt'
 import { AppController } from './app.controller';
 import { CatsModule } from './cats/cats.module';
+import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -22,7 +24,15 @@ import {
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGODB_URL),
+    JwtModule.register({
+      global: true,
+      secret: '哈塞给',
+      signOptions: {
+        expiresIn: '7d',
+      },
+    }),
     CatsModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [

@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let message;
     if (checkValueType(exception.getResponse(), 'object')) {
       const m = (exception.getResponse() as { message?: string })?.message;
-      message = Array.isArray(m) ? m[0] : 'Service Error';
+      message = Array.isArray(m) ? m[0] : m;
     } else {
       message = exception.getResponse();
     }
@@ -46,8 +46,6 @@ export class TransformInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        console.log(Object.keys(data), 'Object.keys(data)')
-        console.log(data, 'data')
         return {
           data,
           code: 0,
