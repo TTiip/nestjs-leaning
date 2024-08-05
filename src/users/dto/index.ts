@@ -1,4 +1,16 @@
-import { IsString, Length, IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString, Length } from 'class-validator'
+
+export class SigninUserDto {
+  @IsString()
+  @IsNotEmpty()
+  @Length(5, 25)
+  userName: string
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(6, 30)
+  passWord: string
+}
 
 export class SignupUserDto {
   @Length(6, 30, { message: '用户名长度必须在6~30个之间' })

@@ -12,17 +12,15 @@ export class LoginGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest()
-    const authorization = request.header('authorization') || ''
+    const authorizationToken = request.header('authorization') || ''
 
-    const bearer = authorization.split(' ')
 
-    if (!bearer || bearer.length < 2) {
+    if (!authorizationToken) {
       throw new UnauthorizedException('登录 token 错误')
     }
 
-    const token = bearer[1]
     try {
-      const info = this.jwtService.verify(token);
+      const info = this.jwtService.verify(authorizationToken);
       request['user'] = info.user
       return true
     }

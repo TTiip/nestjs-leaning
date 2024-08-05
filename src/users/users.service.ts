@@ -2,9 +2,9 @@ import { HttpException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { md5 } from '../utils'
-import { SignupUserDto } from './dto/signup-user.dto'
-import { User } from './schemas/user.schema'
-import { SigninUserDto } from './dto/signin-user.dto'
+import { SignupUserDto } from './dto'
+import { User } from './schemas'
+import { SigninUserDto } from './dto'
 
 @Injectable()
 export class UsersService {
